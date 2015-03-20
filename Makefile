@@ -5,7 +5,7 @@ BUILD_NUMBER ?= 1
 SOURCE = zookeeper-$(VERSION).tar.gz
 TOPDIR = /tmp/zookeeper-rpm
 PWD = $(shell pwd)
-URL = $(shell curl -s http://www.apache.org/dyn/closer.cgi/zookeeper/zookeeper-$(VERSION)/zookeeper-$(VERSION).tar.gz?asjson=1 | python -c 'import sys,json; data=json.load(sys.stdin); print data["preferred"] + data["path_info"]')
+URL = $(shell curl -s https://www.apache.org/dyn/closer.cgi/zookeeper/zookeeper-$(VERSION)/zookeeper-$(VERSION).tar.gz?asjson=1 | python -c 'import sys,json; data=json.load(sys.stdin); print data["preferred"] + data["path_info"]')
 
 rpm: $(SOURCE)
 	@rpmbuild -v -bb \
