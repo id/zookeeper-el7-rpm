@@ -13,7 +13,7 @@ Release: %{build_number}
 License: Apache License, Version 2.0
 Group: Applications/Databases
 URL: http://zookeper.apache.org/
-Source0: http://apache.mirrors.spacedump.net/zookeeper/zookeeper-%{version}/zookeeper-%{version}.tar.gz
+Source0: zookeeper-%{version}.tar.gz
 Source1: zookeeper.service
 Source2: zookeeper.logrotate
 Source3: zoo.cfg
