@@ -20,7 +20,7 @@ source: $(SOURCE)
 
 $(SOURCE): KEYS $(SOURCE).asc
 	@wget -q $(URL)
-	@gpg --verify $(SOURCE).asc $(SOURCE)
+	gpg --verify $(SOURCE).asc $(SOURCE)
 
 clean:
 	@rm -rf $(TOPDIR) x86_64
@@ -31,4 +31,4 @@ $(SOURCE).asc:
 
 KEYS:
 	@wget -q https://dist.apache.org/repos/dist/release/zookeeper/KEYS
-	@gpg --import KEYS
+	gpg --import KEYS
