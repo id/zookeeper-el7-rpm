@@ -13,7 +13,7 @@ Release: %{build_number}
 License: Apache License, Version 2.0
 Group: Applications/Databases
 URL: http://zookeper.apache.org/
-Source0: http://apache.mirrors.spacedump.net/zookeeper/zookeeper-%{version}/zookeeper-%{version}.tar.gz
+Source0: zookeeper-%{version}.tar.gz
 Source1: zookeeper.service
 Source2: zookeeper.logrotate
 Source3: zoo.cfg
@@ -89,7 +89,7 @@ fi
 %config(noreplace) %{_sysconfdir}/logrotate.d/zookeeper
 %config(noreplace) %{_sysconfdir}/sysconfig/zookeeper
 %config(noreplace) %{_conf_dir}/*
-%{_prefix}
+%attr(-,zookeeper,zookeeper) %{_prefix}/zookeeper
 %attr(0755,zookeeper,zookeeper) %dir %{_log_dir}
 %attr(0700,zookeeper,zookeeper) %dir %{_data_dir}
 
