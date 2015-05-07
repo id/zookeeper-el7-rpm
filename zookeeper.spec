@@ -25,6 +25,9 @@ Vendor: Apache Software Foundation
 Packager: Ivan Dyachkov <ivan.dyachkov@klarna.com>
 Provides: zookeeper
 BuildRequires: systemd
+Requires(post): systemd
+Requires(preun): systemd
+Requires(postun): systemd
 
 %description
 ZooKeeper is a centralized service for maintaining configuration information, naming, providing distributed synchronization, and providing group services. All of these kinds of services are used in some form or another by distributed applications. Each time they are implemented there is a lot of work that goes into fixing the bugs and race conditions that are inevitable. Because of the difficulty of implementing these kinds of services, applications initially usually skimp on them ,which make them brittle in the presence of change and difficult to manage. Even when done correctly, different implementations of these services lead to management complexity when the applications are deployed.
@@ -67,20 +70,18 @@ if ! /usr/bin/getent passwd zookeeper >/dev/null ; then
 fi
 
 %post
+%systemd_post zookeeper.service
 
 %preun
-# When the last version of a package is erased, $1 is 0
-if [ $1 = 0 ]; then
-    systemctl stop zookeeper
-    systemctl disable zookeeper
-fi
+%systemd_preun zookeeper.service
 
 %postun
 # When the last version of a package is erased, $1 is 0
 # Otherwise it's an upgrade and we need to restart the service
 if [ $1 -ge 1 ]; then
-    systemctl restart zookeeper
+    /usr/bin/systemctl restart zookeeper.service
 fi
+/usr/bin/systemctl daemon-reload >/dev/null 2>&1 || :
 
 %files
 %defattr(-,root,root)
