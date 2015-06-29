@@ -1,6 +1,6 @@
 /var/log/zookeeper/*.log {
        weekly
-       rotate 10
+       rotate 4
        copytruncate
        delaycompress
        compress
