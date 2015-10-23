@@ -19,6 +19,8 @@ Installing and operating
     sudo systemctl start zookeeper
     sudo systemctl enable zookeeper
 
+Zookeeper shell is available via /usr/local/bin/zkcli or just zkcli since /usr/local/bin is usually in the $PATH.
+
 Default locations
 -----------------
 binaries: /opt/zookeeper  
