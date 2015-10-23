@@ -18,7 +18,9 @@ Source1: zookeeper.service
 Source2: zookeeper.logrotate
 Source3: zoo.cfg
 Source4: log4j.properties
-Source5: zookeeper.sysconfig
+Source5: log4j-cli.properties
+Source6: zookeeper.sysconfig
+Source7: zkcli
 BuildRoot: %{_tmppath}/%{name}-%{version}-root
 Prefix: %{_prefix}
 Vendor: Apache Software Foundation
@@ -38,7 +40,7 @@ ZooKeeper is a centralized service for maintaining configuration information, na
 %build
 
 %install
-mkdir -p $RPM_BUILD_ROOT%{_prefix}/zookeeper
+mkdir -p $RPM_BUILD_ROOT%{_prefix}/zookeeper/bin
 mkdir -p $RPM_BUILD_ROOT%{_log_dir}
 mkdir -p $RPM_BUILD_ROOT%{_data_dir}
 mkdir -p $RPM_BUILD_ROOT%{_unitdir}/zookeeper.service.d
@@ -49,7 +51,9 @@ install -p -D -m 755 %{S:1} $RPM_BUILD_ROOT%{_unitdir}/
 install -p -D -m 644 %{S:2} $RPM_BUILD_ROOT%{_sysconfdir}/logrotate.d/zookeeper
 install -p -D -m 644 %{S:3} $RPM_BUILD_ROOT%{_conf_dir}/
 install -p -D -m 644 %{S:4} $RPM_BUILD_ROOT%{_conf_dir}/
-install -p -D -m 644 %{S:5} $RPM_BUILD_ROOT%{_sysconfdir}/sysconfig/zookeeper
+install -p -D -m 644 %{S:5} $RPM_BUILD_ROOT%{_conf_dir}/
+install -p -D -m 644 %{S:6} $RPM_BUILD_ROOT%{_sysconfdir}/sysconfig/zookeeper
+install -p -D -m 755 %{S:7} $RPM_BUILD_ROOT%/usr/local/bin/zkcli
 install -p -D -m 644 conf/configuration.xsl $RPM_BUILD_ROOT%{_conf_dir}/
 # stupid systemd fails to expand file paths in runtime
 CLASSPATH=
