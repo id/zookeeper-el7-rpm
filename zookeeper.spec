@@ -1,16 +1,16 @@
-%define __jar_repack 0
-#define debug_package %{nil}
-%define zk_prefix     %{_javadir}/zookeeper
-%define zk_confdir    %{_sysconfdir}/zookeeper
-%define zk_logdir     %{_var}/log/zookeeper
-%define zk_datadir    %{_sharedstatedir}/zookeeper
+%global __jar_repack 0
+%global zk_prefix  %{_javadir}/zookeeper
+%global zk_confdir %{_sysconfdir}/zookeeper
+%global zk_logdir  %{_var}/log/zookeeper
+%global zk_datadir %{_sharedstatedir}/zookeeper
+
+%{!?zk_version:%global zk_version 3.4.9}
+%{!?zk_release:%global zk_release 2}
 
 Summary: High-performance coordination service for distributed applications
 Name: zookeeper
-#Version: %{version}
-#Release: %{release}%{?dist}
-Version: 3.4.9
-Release: 1%{?dist}
+Version: %{zk_version}
+Release: %{zk_release}%{?dist}
 License: ASL 2.0 and BSD
 Group: Applications/Databases
 URL: https://zookeeper.apache.org/
@@ -25,6 +25,7 @@ Source7: log4j-cli.properties
 %{?systemd_requires}
 BuildRequires: systemd
 BuildArch: noarch
+Requires: java-headless
 
 %description
 ZooKeeper is a high-performance coordination service for distributed
@@ -90,4 +91,11 @@ fi
 %config(noreplace) %{zk_confdir}/*
 %attr(0755,zookeeper,zookeeper) %dir %{zk_logdir}/
 %attr(0700,zookeeper,zookeeper) %dir %{zk_datadir}/
+
+%changelog
+* Wed Oct 26 2016 Matthias Saou <matthias@saou.eu> 3.4.9-2
+- Add java-headless requirement.
+
+* Tue Oct 11 2016 Matthias Saou <matthias@saou.eu> 3.4.9-1
+- Simplify, fix and clean up the spec file and related files.
 
