@@ -5,7 +5,7 @@
 %global zk_datadir %{_sharedstatedir}/zookeeper
 
 %{!?zk_version:%global zk_version 3.4.9}
-%{!?zk_release:%global zk_release 2}
+%{!?zk_release:%global zk_release 3}
 
 Summary: High-performance coordination service for distributed applications
 Name: zookeeper
@@ -34,6 +34,17 @@ management, synchronization, and group services - in a simple interface so
 you don't have to write them from scratch. You can use it off-the-shelf to
 implement consensus, group management, leader election, and presence
 protocols. And you can build on it for your own, specific needs.
+
+
+%package -n nagios-plugins-zookeeper
+Group:             Applications/System
+Summary:           Provides check_zookeeper support for Nagios
+BuildArch:         noarch
+Requires:          nagios-plugins
+
+%description -n nagios-plugins-zookeeper
+Provides check_zookeeper support for Nagios.
+
 
 %prep
 %setup -q
@@ -64,6 +75,9 @@ install -p -m 0644 %{S:5} %{S:6} %{S:7} conf/configuration.xsl \
 # Empty directories
 mkdir -p $RPM_BUILD_ROOT%{zk_logdir}
 mkdir -p $RPM_BUILD_ROOT%{zk_datadir}
+# Nagios plugin
+install -D -p -m 0755 src/contrib/monitoring/check_zookeeper.py \
+  $RPM_BUILD_ROOT%{_libdir}/nagios/plugins/check_zookeeper
 
 %pre
 /usr/bin/getent group zookeeper >/dev/null || /usr/sbin/groupadd -r zookeeper
@@ -92,7 +106,13 @@ fi
 %attr(0755,zookeeper,zookeeper) %dir %{zk_logdir}/
 %attr(0700,zookeeper,zookeeper) %dir %{zk_datadir}/
 
+%files -n nagios-plugins-zookeeper
+%{_libdir}/nagios/plugins/check_zookeeper
+
 %changelog
+* Tue Nov 22 2016 Michał Lisowski <michal@exads.com> - 3.4.9-3
+- Add nagios-plugins-zookeeper subpackage
+
 * Wed Oct 26 2016 Matthias Saou <matthias@saou.eu> 3.4.9-2
 - Add java-headless requirement.
 
