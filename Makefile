@@ -10,7 +10,7 @@ URL = $(shell curl -s https://www.apache.org/dyn/closer.cgi/zookeeper/zookeeper-
 rpm: $(SOURCE)
 	@rpmbuild -v -bb \
 			--define "_sourcedir $(PWD)" \
-			--define "_rpmdir $(PWD)" \
+			--define "_rpmdir $(PWD)/RPMS" \
 			--define "_topdir $(TOPDIR)" \
 			--define "version $(VERSION)" \
 			--define "build_number $(BUILD_NUMBER)" \
