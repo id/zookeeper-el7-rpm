@@ -1,6 +1,6 @@
 .PHONY:	rpm clean
 
-VERSION ?= 3.4.9
+VERSION ?= 3.4.10
 BUILD_NUMBER ?= 1
 SOURCE = zookeeper-$(VERSION).tar.gz
 TOPDIR = /tmp/zookeeper-rpm
