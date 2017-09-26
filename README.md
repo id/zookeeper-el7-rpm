@@ -11,7 +11,11 @@ Building
 --------
     make rpm
 
-Resulting RPM will be avaliable at $(shell pwd)/x86_64
+or use Docker
+
+    docker build -t zookeeper-build . && docker run -ti -v $(pwd)/RPMS:/root/RPMS zookeeper-build
+
+Resulting RPM will be avaliable at $(shell pwd)/RPMS/x86_64
 
 Installing and operating
 ------------------------
