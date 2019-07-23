@@ -53,7 +53,7 @@ install -p -D -m 644 %{S:3} $RPM_BUILD_ROOT%{_conf_dir}/
 install -p -D -m 644 %{S:4} $RPM_BUILD_ROOT%{_conf_dir}/log4j.properties
 install -p -D -m 644 %{S:5} $RPM_BUILD_ROOT%{_conf_dir}/log4j-cli.properties
 install -p -D -m 644 %{S:6} $RPM_BUILD_ROOT%{_sysconfdir}/sysconfig/zookeeper
-install -p -D -m 755 %{S:7} $RPM_BUILD_ROOT/usr/local/bin/zkcli
+install -p -D -m 755 %{S:7} $RPM_BUILD_ROOT%{_bindir}/zkcli
 install -p -D -m 644 conf/configuration.xsl $RPM_BUILD_ROOT%{_conf_dir}/
 # stupid systemd fails to expand file paths in runtime
 CLASSPATH=
@@ -91,7 +91,7 @@ fi
 %defattr(-,root,root)
 %{_unitdir}/zookeeper.service
 %{_unitdir}/zookeeper.service.d/classpath.conf
-/usr/local/bin/zkcli
+%{_bindir}/zkcli
 %config(noreplace) %{_sysconfdir}/logrotate.d/zookeeper
 %config(noreplace) %{_sysconfdir}/sysconfig/zookeeper
 %config(noreplace) %{_conf_dir}/*
