@@ -70,7 +70,7 @@ rm -rf $RPM_BUILD_ROOT
 %pre
 /usr/bin/getent group zookeeper >/dev/null || /usr/sbin/groupadd -r zookeeper
 if ! /usr/bin/getent passwd zookeeper >/dev/null ; then
-    /usr/sbin/useradd -r -g zookeeper -m -d %{_prefix}/zookeeper -s /bin/bash -c "Zookeeper" zookeeper
+    /usr/sbin/useradd -r -g zookeeper -M -d %{_prefix}/zookeeper -s /bin/bash -c "Zookeeper" zookeeper
 fi
 
 %post
