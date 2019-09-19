@@ -4,7 +4,7 @@ MAINTAINER Sebastien Le Digabel "sledigabel@gmail.com"
 
 RUN yum install -y wget make rpmdevtools
 
-ADD Makefile zookeeper.logrotate zookeeper.service zookeeper.spec zookeeper.sysconfig log4j.properties log4j-cli.properties zkcli zoo.cfg /root/
+ADD Makefile zookeeper.logrotate zookeeper.service zookeeper.spec zookeeper.sysconfig zookeeper.log4j.properties zookeeper.log4j-cli.properties zkcli zoo.cfg /root/
 
 RUN mkdir /root/RPMS
 
