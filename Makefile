@@ -1,7 +1,7 @@
 .PHONY:	rpm clean
 
-VERSION ?= 3.4.9
-RELEASE ?= 2
+VERSION ?= 3.4.14
+BUILD_NUMBER ?= 1
 SOURCE = zookeeper-$(VERSION).tar.gz
 TOPDIR = /tmp/zookeeper-rpm
 PWD = $(shell pwd)
@@ -10,10 +10,10 @@ URL = $(shell curl -s https://www.apache.org/dyn/closer.cgi/zookeeper/zookeeper-
 rpm: $(SOURCE)
 	@rpmbuild -v -bb \
 			--define "_sourcedir $(PWD)" \
-			--define "_rpmdir $(PWD)" \
+			--define "_rpmdir $(PWD)/RPMS" \
 			--define "_topdir $(TOPDIR)" \
-			--define "zk_version $(VERSION)" \
-			--define "zk_release $(RELEASE)" \
+			--define "version $(VERSION)" \
+			--define "build_number $(BUILD_NUMBER)" \
 			zookeeper.spec
 
 source: $(SOURCE)
