@@ -1,7 +1,8 @@
 .PHONY:	rpm clean
 
+NAME ?= zookeeper
 VERSION ?= 3.4.14
-BUILD_NUMBER ?= 1
+RELEASE ?= 1
 SOURCE = zookeeper-$(VERSION).tar.gz
 TOPDIR = /tmp/zookeeper-rpm
 PWD = $(shell pwd)
@@ -12,8 +13,9 @@ rpm: $(SOURCE)
 			--define "_sourcedir $(PWD)" \
 			--define "_rpmdir $(PWD)/RPMS" \
 			--define "_topdir $(TOPDIR)" \
-			--define "version $(VERSION)" \
-			--define "build_number $(BUILD_NUMBER)" \
+			--define "zk_name $(NAME)" \
+			--define "zk_version $(VERSION)" \
+			--define "zk_release $(RELEASE)" \
 			zookeeper.spec
 
 source: $(SOURCE)
