@@ -15,7 +15,7 @@ or use Docker
 
     docker build -t zookeeper-build . && docker run -ti -v $(pwd)/RPMS:/root/RPMS zookeeper-build
 
-Resulting RPM will be avaliable at $(shell pwd)/RPMS/x86_64
+Resulting RPM will be avaliable at $(shell pwd)/RPMS/noarch/
 
 Installing and operating
 ------------------------
@@ -23,11 +23,11 @@ Installing and operating
     sudo systemctl start zookeeper
     sudo systemctl enable zookeeper
 
-Zookeeper shell is available via /usr/local/bin/zkcli or just zkcli since /usr/local/bin is usually in the $PATH.
+Zookeeper shell is available via zkcli.
 
 Default locations
 -----------------
-binaries: /opt/zookeeper  
-data:     /var/lib/zookeeper  
-logs:     /var/log/zookeeper  
-configs:  /etc/zookeeper, /etc/sysconfig/zookeeper  
+archives: /usr/share/java/zookeeper
+data:     /var/lib/zookeeper
+logs:     /var/log/zookeeper
+configs:  /etc/zookeeper, /etc/sysconfig/zookeeper

@@ -4,8 +4,8 @@ After=network.target
 
 [Service]
 User=zookeeper
-Group=zookeeper
 EnvironmentFile=/etc/sysconfig/zookeeper
+Environment=CLASSPATH=.:/usr/share/java/zookeeper/*
 ExecStart=/bin/java -cp $CLASSPATH $LOG4J $JVMFLAGS $ZOOMAIN $ZOOCFG
 SuccessExitStatus=143
 

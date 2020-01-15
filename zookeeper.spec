@@ -1,71 +1,78 @@
-%define __jar_repack 0
-%define debug_package %{nil}
-%define name         zookeeper
-%define _prefix      /opt
-%define _conf_dir    %{_sysconfdir}/%{name}
-%define _log_dir     %{_var}/log/%{name}
-%define _data_dir    %{_sharedstatedir}/%{name}
+%global __jar_repack 0
+%global zk_prefix  %{_javadir}/zookeeper
+%global zk_confdir %{_sysconfdir}/zookeeper
+%global zk_logdir  %{_var}/log/zookeeper
+%global zk_datadir %{_sharedstatedir}/zookeeper
 
-Summary: ZooKeeper is a centralized service for maintaining configuration information, naming, providing distributed synchronization, and providing group services.
-Name: zookeeper
-Version: %{version}
-Release: %{build_number}
-License: Apache License, Version 2.0
+%{!?zk_name:%global zk_name zookeeper}
+%{!?zk_version:%global zk_version 3.4.14}
+%{!?zk_release:%global zk_release 1}
+
+Summary: High-performance coordination service for distributed applications
+Name: %{zk_name}
+Version: %{zk_version}
+Release: %{zk_release}%{?dist}
+License: ASL 2.0 and BSD
 Group: Applications/Databases
-URL: http://zookeper.apache.org/
-Source0: %{name}-%{version}.tar.gz
-Source1: %{name}.service
-Source2: %{name}.logrotate
+URL: https://zookeeper.apache.org/
+Source0: https://www-eu.apache.org/dist/zookeeper/zookeeper-%{version}/zookeeper-%{version}.tar.gz
+Source1: zookeeper.service
+Source2: zookeeper.logrotate
 Source3: zoo.cfg
-Source4: %{name}.log4j.properties
-Source5: %{name}.log4j-cli.properties
-Source6: %{name}.sysconfig
+Source4: zookeeper.log4j.properties
+Source5: zookeeper.log4j-cli.properties
+Source6: zookeeper.sysconfig
 Source7: zkcli
-BuildRoot: %{_tmppath}/%{name}-%{version}-root
-Prefix: %{_prefix}
-Vendor: Apache Software Foundation
-Packager: Ivan Dyachkov <ivan.dyachkov@klarna.com>
-Provides: %{name}
-BuildRequires: systemd
-Requires(post): systemd
-Requires(preun): systemd
-Requires(postun): systemd
+%{?systemd_requires}
+BuildArch: noarch
+Requires: java-headless
 
 %description
-ZooKeeper is a centralized service for maintaining configuration information, naming, providing distributed synchronization, and providing group services. All of these kinds of services are used in some form or another by distributed applications. Each time they are implemented there is a lot of work that goes into fixing the bugs and race conditions that are inevitable. Because of the difficulty of implementing these kinds of services, applications initially usually skimp on them ,which make them brittle in the presence of change and difficult to manage. Even when done correctly, different implementations of these services lead to management complexity when the applications are deployed.
+ZooKeeper is a high-performance coordination service for distributed
+applications. It exposes common services - such as naming, configuration
+management, synchronization, and group services - in a simple interface so
+you don't have to write them from scratch. You can use it off-the-shelf to
+implement consensus, group management, leader election, and presence
+protocols. And you can build on it for your own, specific needs.
+
+%package -n nagios-plugins-zookeeper
+Group: Applications/System
+Summary: Provides check_zookeeper support for Nagios
+Requires: nagios-plugins
+
+%description -n nagios-plugins-zookeeper
+Provides check_zookeeper support for Nagios.
 
 %prep
-%setup -q
+%setup -q -n zookeeper-%{version}
 
 %build
 
 %install
-mkdir -p $RPM_BUILD_ROOT%{_prefix}/zookeeper
-mkdir -p $RPM_BUILD_ROOT%{_log_dir}
-mkdir -p $RPM_BUILD_ROOT%{_data_dir}
-mkdir -p $RPM_BUILD_ROOT%{_unitdir}/zookeeper.service.d
-mkdir -p $RPM_BUILD_ROOT%{_conf_dir}/
-install -p -D -m 644 zookeeper-%{version}.jar $RPM_BUILD_ROOT%{_prefix}/zookeeper/
-install -p -D -m 644 lib/*.jar $RPM_BUILD_ROOT%{_prefix}/zookeeper/
-install -p -D -m 755 %{S:1} $RPM_BUILD_ROOT%{_unitdir}/
-install -p -D -m 644 %{S:2} $RPM_BUILD_ROOT%{_sysconfdir}/logrotate.d/zookeeper
-install -p -D -m 644 %{S:3} $RPM_BUILD_ROOT%{_conf_dir}/
-install -p -D -m 644 %{S:4} $RPM_BUILD_ROOT%{_conf_dir}/log4j.properties
-install -p -D -m 644 %{S:5} $RPM_BUILD_ROOT%{_conf_dir}/log4j-cli.properties
-install -p -D -m 644 %{S:6} $RPM_BUILD_ROOT%{_sysconfdir}/sysconfig/zookeeper
-install -p -D -m 755 %{S:7} $RPM_BUILD_ROOT%{_bindir}/zkcli
-install -p -D -m 644 conf/configuration.xsl $RPM_BUILD_ROOT%{_conf_dir}/
-# stupid systemd fails to expand file paths in runtime
-CLASSPATH=
-for i in $RPM_BUILD_ROOT%{_prefix}/zookeeper/*.jar
-do
-  CLASSPATH="%{_prefix}/zookeeper/$(basename ${i}):${CLASSPATH}"
-done
-echo "[Service]" > $RPM_BUILD_ROOT%{_unitdir}/zookeeper.service.d/classpath.conf
-echo "Environment=CLASSPATH=${CLASSPATH}" >> $RPM_BUILD_ROOT%{_unitdir}/zookeeper.service.d/classpath.conf
-
-%clean
-rm -rf $RPM_BUILD_ROOT
+# JARs
+mkdir -p $RPM_BUILD_ROOT%{zk_prefix}
+install -p -m 0644 zookeeper-%{version}.jar lib/*.jar \
+  $RPM_BUILD_ROOT%{zk_prefix}/
+# Service, systemd fails to expand file paths in runtime
+install -p -D -m 0644 %{S:1} $RPM_BUILD_ROOT%{_unitdir}/zookeeper.service
+mkdir -p $RPM_BUILD_ROOT%{_unitdir}
+# Configuration
+install -p -D -m 0644 %{S:2} $RPM_BUILD_ROOT%{_sysconfdir}/logrotate.d/zookeeper
+install -p -D -m 0644 %{S:3} $RPM_BUILD_ROOT%{zk_confdir}/zoo.cfg
+install -p -D -m 0644 %{S:4} $RPM_BUILD_ROOT%{zk_confdir}/log4j.properties
+install -p -D -m 0644 %{S:5} $RPM_BUILD_ROOT%{zk_confdir}/log4j-cli.properties
+install -p -D -m 0644 %{S:6} $RPM_BUILD_ROOT%{_sysconfdir}/sysconfig/zookeeper
+# CLI
+install -p -D -m 0755 %{S:7} $RPM_BUILD_ROOT%{_bindir}/zkcli
+# Empty directories
+mkdir -p $RPM_BUILD_ROOT%{zk_logdir}
+mkdir -p $RPM_BUILD_ROOT%{zk_datadir}
+# Nagios plugin, enforce python2 for RHEL8
+install -D -p -m 0755 \
+  zookeeper-contrib/zookeeper-contrib-monitoring/check_zookeeper.py \
+  $RPM_BUILD_ROOT%{_libdir}/nagios/plugins/check_zookeeper
+sed -i -e 's/python$/python2/g' \
+  $RPM_BUILD_ROOT%{_libdir}/nagios/plugins/check_zookeeper
 
 %pre
 /usr/bin/getent group zookeeper >/dev/null || /usr/sbin/groupadd -r zookeeper
@@ -80,22 +87,20 @@ fi
 %systemd_preun zookeeper.service
 
 %postun
-# When the last version of a package is erased, $1 is 0
-# Otherwise it's an upgrade and we need to restart the service
-if [ $1 -ge 1 ]; then
-    /usr/bin/systemctl restart zookeeper.service
-fi
-/usr/bin/systemctl daemon-reload >/dev/null 2>&1 || :
+%systemd_postun_with_restart zookeeper.service
 
 %files
-%defattr(-,root,root)
+%license LICENSE.txt
+%{zk_prefix}/
 %{_unitdir}/zookeeper.service
-%{_unitdir}/zookeeper.service.d/classpath.conf
 %{_bindir}/zkcli
 %config(noreplace) %{_sysconfdir}/logrotate.d/zookeeper
 %config(noreplace) %{_sysconfdir}/sysconfig/zookeeper
-%config(noreplace) %{_conf_dir}/*
-%attr(-,zookeeper,zookeeper) %{_prefix}/zookeeper
-%attr(0755,zookeeper,zookeeper) %dir %{_log_dir}
-%attr(0700,zookeeper,zookeeper) %dir %{_data_dir}
+%dir %{zk_confdir}/
+%config(noreplace) %{zk_confdir}/*
+%attr(0755,zookeeper,zookeeper) %dir %{zk_logdir}/
+%attr(0700,zookeeper,zookeeper) %dir %{zk_datadir}/
+
+%files -n nagios-plugins-zookeeper
+%{_libdir}/nagios/plugins/check_zookeeper
 
