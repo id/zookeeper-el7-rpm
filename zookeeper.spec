@@ -13,7 +13,7 @@ Release: %{build_number}
 License: Apache License, Version 2.0
 Group: Applications/Databases
 URL: http://zookeper.apache.org/
-Source0: %{name}-%{version}.tar.gz
+Source0: apache-%{name}-%{version}-bin.tar.gz
 Source1: %{name}.service
 Source2: %{name}.logrotate
 Source3: zoo.cfg
@@ -35,7 +35,7 @@ Requires(postun): systemd
 ZooKeeper is a centralized service for maintaining configuration information, naming, providing distributed synchronization, and providing group services. All of these kinds of services are used in some form or another by distributed applications. Each time they are implemented there is a lot of work that goes into fixing the bugs and race conditions that are inevitable. Because of the difficulty of implementing these kinds of services, applications initially usually skimp on them ,which make them brittle in the presence of change and difficult to manage. Even when done correctly, different implementations of these services lead to management complexity when the applications are deployed.
 
 %prep
-%setup -q
+%setup -q -n apache-%{name}-%{version}-bin
 
 %build
 
@@ -45,7 +45,6 @@ mkdir -p $RPM_BUILD_ROOT%{_log_dir}
 mkdir -p $RPM_BUILD_ROOT%{_data_dir}
 mkdir -p $RPM_BUILD_ROOT%{_unitdir}/zookeeper.service.d
 mkdir -p $RPM_BUILD_ROOT%{_conf_dir}/
-install -p -D -m 644 zookeeper-%{version}.jar $RPM_BUILD_ROOT%{_prefix}/zookeeper/
 install -p -D -m 644 lib/*.jar $RPM_BUILD_ROOT%{_prefix}/zookeeper/
 install -p -D -m 644 %{S:1} $RPM_BUILD_ROOT%{_unitdir}/
 install -p -D -m 644 %{S:2} $RPM_BUILD_ROOT%{_sysconfdir}/logrotate.d/zookeeper
