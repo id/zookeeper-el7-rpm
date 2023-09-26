@@ -5,7 +5,7 @@ BUILD_NUMBER ?= 1
 SOURCE = apache-zookeeper-$(VERSION)-bin.tar.gz
 TOPDIR = /tmp/zookeeper-rpm
 PWD = $(shell pwd)
-URL = https://dlcdn.apache.org/zookeeper/zookeeper-$(VERSION)/$(SOURCE)
+URL = https://archive.apache.org/dist/zookeeper/zookeeper-$(VERSION)/$(SOURCE)
 
 rpm: $(SOURCE)
 	@rpmbuild -v -bb \
